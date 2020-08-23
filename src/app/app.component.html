@@ -1,20 +1,38 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<mat-form-field class="example-full-width">
+	<input type="text" placeholder="Select Superhero" aria-label="Select Users" matInput [matAutocomplete]="auto"
+		[formControl]="userControl">
+	<mat-hint>Enter text to find superhero by name</mat-hint>
+</mat-form-field>
 
+<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+	<mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+	<mat-option [disabled]="selectedUsers.length==4?true:false" *ngFor="let user of filteredUsers"
+		[value]="selectedUsers">
+		<div (click)="optionClicked($event, user)">
+			<mat-checkbox [checked]="user.selected" (change)="toggleSelection(user)" (click)="$event.stopPropagation()">
+				{{ user.name }}
+			</mat-checkbox>
+		</div>
+	</mat-option>
+</mat-autocomplete>
+
+<br><br>
+<div id="chartdiv" style="width: 100%; height: 400px"></div>
+<br><br>
+<button (click)="reset()">Reset</button><button (click)="compare()">Compare</button>
+<br><br>
+<label>Selected Superhero:</label>
+<mat-list dense>
+	<mat-list-item *ngIf="selectedUsers?.length === 0">(None)</mat-list-item>
+	<mat-list-item (click)="favourite(user)" *ngFor="let user of selectedUsers">
+		{{ user.name }}
+	</mat-list-item>
+</mat-list>
+<br><br>
+<label>Favourite Superhero:</label>
+<mat-list dense>
+	<mat-list-item *ngIf="favouriteUsers?.length === 0">(None)</mat-list-item>
+	<mat-list-item *ngFor="let user of favouriteUsers">
+		{{ user.name }}
+	</mat-list-item>
+</mat-list>
